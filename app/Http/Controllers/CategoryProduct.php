@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 class CategoryProduct extends Controller
 {
+    // -> Kiểm tra người dùng có đăng nhập admin hay chưa.
     public function AuthLogin(){
         $admin_id=Session::get('admin_id');
         // kiểm tra đã đăng nhập chưa
@@ -18,22 +19,26 @@ class CategoryProduct extends Controller
             return Redirect::to('admin')->send();
         }
     }
+    // -> Hiển thị form thêm danh mục sản phẩm mới trong admin.
     public function add_category_product(){
         $this->AuthLogin();
         return view('admin.add_category_product');
     }
+    // -> Hiển thị form chỉnh sửa danh mục sản phẩm theo ID.
     public function edit_category_product($cate_id){
         $this->AuthLogin();
         $edit_category_product=DB::table('tbl_category_product')->where('category_id',$cate_id)->get();
         $manager_category_product=view('admin.edit_category_product')->with('edit_category_product',$edit_category_product);
         return view('admin_layout')->with('edit_category_product',$manager_category_product);
     }
+    // -> Hiển thị danh sách tất cả danh mục sản phẩm trong admin.
     public function all_category_product(){
         $this->AuthLogin();
         $all_category_product=DB::table('tbl_category_product')->get();
         $manager_category_product=view('admin.all_category_product')->with('all_category_product',$all_category_product);
         return view('admin_layout')->with('all_category_product',$manager_category_product);
     }
+    // -> Lưu dữ liệu danh mục sản phẩm mới vào CSDL.
     public function save_category_product(Request $request){
         $this->AuthLogin();
        $data=array();
@@ -44,7 +49,7 @@ class CategoryProduct extends Controller
        Session::put('message','Thêm danh mục sản phẩm thành công!');
        return Redirect::to('add-category-product');
     }
-
+// -> Bật/tắt trạng thái hiển thị của danh mục sản phẩm.
     public function unactive_category_product($cate_id){
         $this->AuthLogin();
         DB::table('tbl_category_product')->where('category_id', $cate_id)->update(['category_status' => 1]);
@@ -58,6 +63,7 @@ class CategoryProduct extends Controller
         Session::put('message', 'Hiển thị danh mục sản phẩm thành công!');
         return Redirect::to('all-category-product');
     }
+    // -> Cập nhật thông tin danh mục sản phẩm theo ID.
     public function update_category_product(Request $request ,$cate_id){
         $this->AuthLogin();
         $data=array();
@@ -77,6 +83,7 @@ class CategoryProduct extends Controller
 
 
 ///-> FrontEnd
+//  Hiển thị trang danh mục sản phẩm ở giao diện người dùng (frontend).
 public function show_category_home($category_id){
     $cate_product=DB::table('tbl_category_product')->where('category_status','0')->orderby('category_id','asc')->get(); 
     $brand_product=DB::table('tbl_brand_product')->where('brand_status','0')->orderby('brand_id','asc')->get(); 

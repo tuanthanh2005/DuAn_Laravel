@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryProduct;
 use App\Http\Controllers\BrandProduct;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\LoginController;
 
 
 
@@ -23,7 +24,13 @@ use App\Http\Controllers\CartController;
 
 
 
-
+// đăng nhập đăng kí 
+Route::get('/login', [LoginController::class, 'login']);
+Route::get('/register', [LoginController::class, 'register']);
+Route::post('/save-register', [LoginController::class, 'save_register']);
+Route::post('/save-login', [LoginController::class, 'save_login']);
+Route::get('/log-out', [LoginController::class, 'log_out']);
+Route::get('/forgot-password', [LoginController::class, 'forgot_password']);
 // frontend
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/trang-chu', [HomeController::class, 'index']);
@@ -91,3 +98,4 @@ Route::match(['get','post'], '/cart', [CartController::class, 'cart'])
      ->name('cart.show');
      Route::get('/cart/remove/{id}', [CartController::class, 'remove_item'])
      ->name('cart.remove');
+

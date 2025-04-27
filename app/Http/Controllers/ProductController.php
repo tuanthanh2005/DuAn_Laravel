@@ -20,12 +20,14 @@ class ProductController extends Controller
             return Redirect::to('admin')->send();
         }
     }
+      // Hiển thị form thêm sản phẩm mới.
     public function add_product(){
         $this->AuthLogin();
         $cate_product=DB::table('tbl_category_product')->orderby('category_id','desc')->get(); 
         $brand_product=DB::table('tbl_brand_product')->orderby('brand_id','desc')->get(); 
         return view('admin.add_product')->with('cate_product',$cate_product)->with('brand_product',$brand_product);
     }
+    // Lưu sản phẩm mới từ form vào CSDL.
     public function save_product(Request $request)
     {
         $this->AuthLogin();
@@ -55,7 +57,8 @@ class ProductController extends Controller
         Session::put('message', 'Thêm sản phẩm thành công!');
         return Redirect::to('add-product');
     }
-   public function all_product()
+//   Hiển thị danh sách tất cả sản phẩm.
+    public function all_product()
 {
     $this->AuthLogin();
     $all_product = DB::table('tbl_product')
@@ -65,7 +68,7 @@ class ProductController extends Controller
     $manager_product = view('admin.all_product')->with('all_product', $all_product);
     return view('admin_layout')->with('admin.all_product', $manager_product);
 }
-
+// Thay đổi trạng thái hiển thị của sản phẩm (0 hoặc 1).
     public function unactive_product($product_id){
         $this->AuthLogin();
         DB::table('tbl_product')->where('product_id', $product_id)->update(['product_status' => 0]);
@@ -89,6 +92,7 @@ class ProductController extends Controller
         ->with('brand_product',$brand_product);// có cái này để bên trang edit ko cần phải sửa lại foreach
         return view('admin_layout')->with('edit_product',$manager_product);
     }
+    // Cập nhật thông tin sản phẩm theo ID.
     public function update_product(Request $request ,$product_id){
         $this->AuthLogin();
         $data = array();
@@ -124,7 +128,7 @@ class ProductController extends Controller
     // ----------------------------kết thúc admin
     
     //----------> frontend
-    
+    // Hiển thị chi tiết sản phẩm cho người dùng.
     public function detail_product($product_id){
         $cate_product=DB::table('tbl_category_product')->orderby('category_id','asc')->get(); 
         $brand_product=DB::table('tbl_brand_product')->orderby('brand_id','asc')->get(); 

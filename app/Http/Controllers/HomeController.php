@@ -11,7 +11,18 @@ use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
+    public function AuthLogin(){
+        $admin_id=Session::get('customer_id');
+        // kiểm tra đã đăng nhập chưa
+        if($admin_id){
+            return Redirect::to('dashboard');
+        }else{
+            // chỉ cần gọi $this->AuthLogin(); gán cho các fun khác là oke
+            return Redirect::to('login')->send();
+        }
+    }
     public function index(){
+        $this->AuthLogin();
         $cate_product=DB::table('tbl_category_product')->where('category_status','0')->orderby('category_id','asc')->get(); 
         $brand_product=DB::table('tbl_brand_product')->where('brand_status','0')->orderby('brand_id','asc')->get(); 
     	// lấy tất cả sản phẩm bên product đưa vào sản phẩm mới nhất
